@@ -9,6 +9,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strconv"
 	"strings"
 
 	"github.com/spf13/viper"
@@ -98,8 +99,8 @@ func main() {
 	handleOperation(operation, resources, flags)
 }
 
-func parseDynamicFlags(args []string) map[string]string {
-	flags := make(map[string]string)
+func parseDynamicFlags(args []string) map[string]interface{} {
+	flags := make(map[string]interface{})
 	i := 0
 	for i < len(args) {
 		arg := args[i]
@@ -118,14 +119,31 @@ func parseDynamicFlags(args []string) map[string]string {
 					value = ""
 				}
 			}
-			flags[key] = value
+			flags[key] = parseValue(value)
 		}
 		i++
 	}
 	return flags
 }
 
-func handleOperation(operation string, resources []string, flags map[string]string) {
+func parseValue(value string) interface{} {
+	// Try to parse as int
+	if intVal, err := strconv.ParseInt(value, 10, 64); err == nil {
+		return intVal
+	}
+	// Try to parse as bool
+	if boolVal, err := strconv.ParseBool(value); err == nil {
+		return boolVal
+	}
+	// Try to parse as float
+	if floatVal, err := strconv.ParseFloat(value, 64); err == nil {
+		return floatVal
+	}
+	// Return as string
+	return value
+}
+
+func handleOperation(operation string, resources []string, flags map[string]interface{}) {
 	endpoint := buildEndpoint(resources)
 
 	if debug {
@@ -151,7 +169,7 @@ func buildEndpoint(resources []string) string {
 	return endpoint
 }
 
-func makeGetRequest(endpoint string, params map[string]string) {
+func makeGetRequest(endpoint string, params map[string]interface{}) {
 	url := viper.GetString("url") + endpoint
 	if debug {
 		fmt.Println("Performing GET on URL:", url)
@@ -163,7 +181,7 @@ func makeGetRequest(endpoint string, params map[string]string) {
 
 	q := req.URL.Query()
 	for key, value := range params {
-		q.Add(key, value)
+		q.Add(key, fmt.Sprintf("%v", value))
 	}
 	req.URL.RawQuery = q.Encode()
 
@@ -186,7 +204,7 @@ func makeGetRequest(endpoint string, params map[string]string) {
 	fmt.Println(string(body))
 }
 
-func makePostRequest(endpoint string, bodyData map[string]string) {
+func makePostRequest(endpoint string, bodyData map[string]interface{}) {
 	url := viper.GetString("url") + endpoint
 	if debug {
 		fmt.Println("Performing POST on URL:", url)
@@ -221,7 +239,7 @@ func makePostRequest(endpoint string, bodyData map[string]string) {
 	fmt.Println(string(body))
 }
 
-func makePutRequest(endpoint string, bodyData map[string]string) {
+func makePutRequest(endpoint string, bodyData map[string]interface{}) {
 	url := viper.GetString("url") + endpoint
 	if debug {
 		fmt.Println("Performing PUT on URL:", url)
