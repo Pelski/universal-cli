@@ -23,6 +23,7 @@ jobs:
         run: go test
   Build:
     runs-on: ubuntu-latest
+    needs: Test
 
     steps:
       - name: Checkout Code
