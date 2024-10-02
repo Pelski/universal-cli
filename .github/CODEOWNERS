@@ -1,2 +1,3 @@
-* @Pelski
-*.go @Pelski
+*                       @Pelski
+*.go                    @Pelski
+/.github/CODEOWNERS     @Pelski
