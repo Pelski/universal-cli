@@ -21,7 +21,8 @@ jobs:
 
       - name: Go Test
         run: go test
-  Build:
+
+  Build-linux:
     runs-on: ubuntu-latest
     needs: Test
 
@@ -34,11 +35,33 @@ jobs:
         with:
           go-version: '1.22'
 
-      - name: Go Build
-        run: go build -o build/ucli
+      - name: Go Build for Linux amd64
+        run: GOOS=linux GOARCH=amd64 go build -o build/ucli-linux-amd64
 
       - name: Upload Build Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: ucli
-          path: build/ucli
+          name: ucli-linux-amd64
+          path: build/ucli-linux-amd64
+
+  Build-macOS:
+    runs-on: macos-latest
+    needs: Test
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Go environment
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.22'
+
+      - name: Go Build for macOS ARM
+        run: GOOS=darwin GOARCH=arm64 go build -o build/ucli-macos-arm64
+
+      - name: Upload Build Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ucli-macos-arm64
+          path: build/ucli-macos-arm64
