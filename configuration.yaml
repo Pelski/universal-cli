@@ -1,0 +1,6 @@
+url: http://localhost:8123/api
+#token: YOUR_LONG_LIVED_ACCESS_TOKEN
+#username: BASIC_AUTJ_USERNAME
+#password: BASIC_AUTH_PASSWORD
+headers:
+  testheader: testvalue
