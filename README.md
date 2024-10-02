@@ -23,7 +23,7 @@ git clone [repository_url]
 cd [repository_directory]
 
 # Build the executable
-go build -o universal-cli
+go build -o ucli
 # or
 just build
 ```
@@ -31,7 +31,7 @@ just build
 ## Usage
 
 ```bash
-./universal-cli [--config CONFIG_FILE] [--debug] OPERATION RESOURCE [RESOURCE ...] [--FLAG VALUE ...]
+./ucli [--config CONFIG_FILE] [--debug] OPERATION RESOURCE [RESOURCE ...] [--FLAG VALUE ...]
 ```
 
 ### Operations
@@ -56,7 +56,7 @@ just build
 #### GET Request
 
 ```bash
-./universal-cli get users --page 2 --limit 10
+./ucli get users --page 2 --limit 10
 ```
 
 Performs a **GET** request to `/users` with query parameters `page=2` and `limit=10`.
@@ -64,7 +64,7 @@ Performs a **GET** request to `/users` with query parameters `page=2` and `limit
 #### POST Request
 
 ```bash
-./universal-cli create users --name "John Doe" --email "john@example.com"
+./ucli create users --name "John Doe" --email "john@example.com"
 ```
 
 Performs a **POST** request to `/users` with JSON body `{"name": "John Doe", "email": "john@example.com"}`.
@@ -72,7 +72,7 @@ Performs a **POST** request to `/users` with JSON body `{"name": "John Doe", "em
 #### PUT Request
 
 ```bash
-./universal-cli update users 123 --email "newemail@example.com"
+./ucli update users 123 --email "newemail@example.com"
 ```
 
 Performs a **PUT** request to `/users/123` with JSON body `{"email": "newemail@example.com"}`.
@@ -80,7 +80,7 @@ Performs a **PUT** request to `/users/123` with JSON body `{"email": "newemail@e
 #### DELETE Request
 
 ```bash
-./universal-cli delete users 123
+./ucli delete users 123
 ```
 
 Performs a **DELETE** request to `/users/123`.
@@ -134,7 +134,7 @@ headers:
 - Outputs detailed information about requests and responses.
 
 ```bash
-./universal-cli --debug get users
+./ucli --debug get users
 ```
 
 ## Dependencies
@@ -150,7 +150,9 @@ go get github.com/spf13/viper
 ## Building from Source
 
 ```bash
-go build -o universal-cli
+go build -o ucli
+# or
+just build
 ```
 
 ## License
