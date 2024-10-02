@@ -24,6 +24,8 @@ cd [repository_directory]
 
 # Build the executable
 go build -o universal-cli
+# or
+just build
 ```
 
 ## Usage
