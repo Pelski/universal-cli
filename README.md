@@ -1,4 +1,8 @@
-# Universal CLI - http client for creating tools
+Jasne! Oto zaktualizowana wersja Twojego `README.md`:
+
+---
+
+# Universal CLI - HTTP client for creating tools
 
 This is a command-line tool written in Go that allows you to interact with HTTP APIs using standard HTTP methods (`GET`, `POST`, `PUT`, `DELETE`). It supports configuration via a file, authentication methods, custom headers, and dynamic parameters.
 
@@ -6,11 +10,13 @@ This is a command-line tool written in Go that allows you to interact with HTTP 
 
 - **HTTP Operations**: Supports `get`, `create`, `update`, `delete` and their aliases (`list`, `show`, `set`, `drop`).
 - **Authentication**:
-    - **Bearer Token**: Use a token file for Bearer authentication.
-    - **Basic Auth**: Use username and password for Basic Authentication.
+  - **Bearer Token**: Use a token file for Bearer authentication.
+  - **Basic Auth**: Use username and password for Basic Authentication.
 - **Configuration**: Load settings from a YAML configuration file.
 - **Custom Headers**: Add additional headers from the configuration.
 - **Dynamic Flags**: Pass parameters and data via command-line flags.
+- **JSON Input Support**: Dynamically parse JSON input as parameters.
+- **Auto Parsing**: Handles integer, boolean, float, and JSON types for flags.
 - **Debug Mode**: Enable verbose output for debugging purposes.
 
 ## Installation
@@ -37,7 +43,7 @@ just build
 ### Operations
 
 - `get`, `list`, `show`: Perform a **GET** request.
-- `create`: Perform a **POST** request.
+- `create`, `search`, `find`: Perform a **POST** request.
 - `update`, `set`: Perform a **PUT** request.
 - `delete`, `drop`: Perform a **DELETE** request.
 
@@ -50,6 +56,7 @@ just build
 
 - Pass additional parameters or data using flags prefixed with `--`.
 - Flags can be in the form `--key value` or `--key=value`.
+- Supports automatic parsing of **integers**, **booleans**, **floats**, and **JSON** data.
 
 ### Examples
 
@@ -131,11 +138,19 @@ headers:
 ## Debug Mode
 
 - Enable by adding the `--debug` flag.
-- Outputs detailed information about requests and responses.
+- Outputs detailed information about requests, responses, and query parameters.
 
 ```bash
 ./ucli --debug get users
 ```
+
+## Dynamic Flags
+
+- Parameters passed via flags are automatically parsed as:
+  - **integers** (e.g., `--limit=10`),
+  - **booleans** (e.g., `--debug=true`),
+  - **floats** (e.g., `--price=99.99`),
+  - **JSON** objects or arrays (e.g., `--filters='{"name": "John"}'`).
 
 ## Dependencies
 
