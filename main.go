@@ -30,7 +30,7 @@ func initConfig(configPath string) {
 		panic(fmt.Errorf("Error loading configuration: %s \n", err))
 	}
 	if debug {
-		fmt.Println("Configuration loaded from file:", viper.ConfigFileUsed())
+		fmt.Println("> Configuration loaded from file:", viper.ConfigFileUsed())
 	}
 }
 
@@ -91,9 +91,9 @@ func main() {
 	flags := parseDynamicFlags(flagsArgs)
 
 	if debug {
-		fmt.Println("Operation:", operation)
-		fmt.Println("Resources:", resources)
-		fmt.Println("Flags:", flags)
+		fmt.Println("> Operation:", operation)
+		fmt.Println("> Resources:", resources)
+		fmt.Println("> Flags:", flags)
 	}
 
 	handleOperation(operation, resources, flags)
@@ -156,7 +156,7 @@ func handleOperation(operation string, resources []string, flags map[string]inte
 	endpoint := buildEndpoint(resources)
 
 	if debug {
-		fmt.Println("Endpoint:", endpoint)
+		fmt.Println("> Endpoint:", endpoint)
 	}
 
 	switch operation {
@@ -181,7 +181,7 @@ func buildEndpoint(resources []string) string {
 func makeGetRequest(endpoint string, params map[string]interface{}) {
 	url := viper.GetString("url") + endpoint
 	if debug {
-		fmt.Println("Performing GET on URL:", url)
+		fmt.Println("> Performing GET on URL:", url)
 	}
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
@@ -198,8 +198,8 @@ func makeGetRequest(endpoint string, params map[string]interface{}) {
 	setCustomHeaders(req)
 
 	if debug {
-		fmt.Println("Request headers:", req.Header)
-		fmt.Println("Query parameters:", req.URL.RawQuery)
+		fmt.Println("> Request headers:", req.Header)
+		fmt.Println("> Query parameters:", req.URL.RawQuery)
 	}
 
 	client := &http.Client{}
@@ -210,18 +210,24 @@ func makeGetRequest(endpoint string, params map[string]interface{}) {
 	defer closeBody(resp.Body)
 
 	body, _ := ioutil.ReadAll(resp.Body)
+
+	if debug {
+		fmt.Println("> Response Status:", resp.Status)
+		fmt.Println("> Response Headers:", resp.Header)
+	}
+
 	fmt.Println(string(body))
 }
 
 func makePostRequest(endpoint string, bodyData map[string]interface{}) {
 	url := viper.GetString("url") + endpoint
 	if debug {
-		fmt.Println("Performing POST on URL:", url)
+		fmt.Println("> Performing POST on URL:", url)
 	}
 	jsonData, _ := json.Marshal(bodyData)
 
 	if debug {
-		fmt.Println("Data sent in request:", string(jsonData))
+		fmt.Println("> Data sent in request:", string(jsonData))
 	}
 
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonData))
@@ -234,7 +240,7 @@ func makePostRequest(endpoint string, bodyData map[string]interface{}) {
 	setCustomHeaders(req)
 
 	if debug {
-		fmt.Println("Request headers:", req.Header)
+		fmt.Println("> Request headers:", req.Header)
 	}
 
 	client := &http.Client{}
@@ -245,18 +251,24 @@ func makePostRequest(endpoint string, bodyData map[string]interface{}) {
 	defer closeBody(resp.Body)
 
 	body, _ := ioutil.ReadAll(resp.Body)
+
+	if debug {
+		fmt.Println("> Response Status:", resp.Status)
+		fmt.Println("> Response Headers:", resp.Header)
+	}
+
 	fmt.Println(string(body))
 }
 
 func makePutRequest(endpoint string, bodyData map[string]interface{}) {
 	url := viper.GetString("url") + endpoint
 	if debug {
-		fmt.Println("Performing PUT on URL:", url)
+		fmt.Println("> Performing PUT on URL:", url)
 	}
 	jsonData, _ := json.Marshal(bodyData)
 
 	if debug {
-		fmt.Println("Data sent in request:", string(jsonData))
+		fmt.Println("> Data sent in request:", string(jsonData))
 	}
 
 	req, err := http.NewRequest("PUT", url, bytes.NewBuffer(jsonData))
@@ -269,7 +281,7 @@ func makePutRequest(endpoint string, bodyData map[string]interface{}) {
 	setCustomHeaders(req)
 
 	if debug {
-		fmt.Println("Request headers:", req.Header)
+		fmt.Println("> Request headers:", req.Header)
 	}
 
 	client := &http.Client{}
@@ -280,13 +292,19 @@ func makePutRequest(endpoint string, bodyData map[string]interface{}) {
 	defer closeBody(resp.Body)
 
 	body, _ := ioutil.ReadAll(resp.Body)
+
+	if debug {
+		fmt.Println("> Response Status:", resp.Status)
+		fmt.Println("> Response Headers:", resp.Header)
+	}
+
 	fmt.Println(string(body))
 }
 
 func makeDeleteRequest(endpoint string) {
 	url := viper.GetString("url") + endpoint
 	if debug {
-		fmt.Println("Performing DELETE on URL:", url)
+		fmt.Println("> Performing DELETE on URL:", url)
 	}
 	req, err := http.NewRequest("DELETE", url, nil)
 	if err != nil {
@@ -297,7 +315,7 @@ func makeDeleteRequest(endpoint string) {
 	setCustomHeaders(req)
 
 	if debug {
-		fmt.Println("Request headers:", req.Header)
+		fmt.Println("> Request headers:", req.Header)
 	}
 
 	client := &http.Client{}
@@ -308,6 +326,12 @@ func makeDeleteRequest(endpoint string) {
 	defer closeBody(resp.Body)
 
 	body, _ := ioutil.ReadAll(resp.Body)
+
+	if debug {
+		fmt.Println("> Response Status:", resp.Status)
+		fmt.Println("> Response Headers:", resp.Header)
+	}
+
 	fmt.Println(string(body))
 }
 
@@ -321,7 +345,7 @@ func setAuthorization(req *http.Request) {
 		token := strings.TrimSpace(string(tokenBytes))
 		req.Header.Set("Authorization", "Bearer "+token)
 		if debug {
-			fmt.Println("Set Bearer Token in Authorization header")
+			fmt.Println("> Set Bearer Token in Authorization header")
 		}
 		return
 	}
@@ -331,7 +355,7 @@ func setAuthorization(req *http.Request) {
 	if username != "" && password != "" {
 		req.SetBasicAuth(username, password)
 		if debug {
-			fmt.Println("Set Basic Auth with username:", username)
+			fmt.Println("> Set Basic Auth with username:", username)
 		}
 	}
 }
@@ -343,7 +367,7 @@ func setCustomHeaders(req *http.Request) {
 			req.Header.Set(key, value)
 		}
 		if debug {
-			fmt.Println("Set additional headers from configuration:", headers)
+			fmt.Println("> Set additional headers from configuration:", headers)
 		}
 	}
 }
