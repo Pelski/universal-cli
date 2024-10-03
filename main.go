@@ -139,6 +139,15 @@ func parseValue(value string) interface{} {
 	if floatVal, err := strconv.ParseFloat(value, 64); err == nil {
 		return floatVal
 	}
+	// Try to parse as JSON (array or object)
+	trimmedValue := strings.TrimSpace(value)
+	if strings.HasPrefix(trimmedValue, "[") || strings.HasPrefix(trimmedValue, "{") {
+		var jsonData interface{}
+		err := json.Unmarshal([]byte(trimmedValue), &jsonData)
+		if err == nil {
+			return jsonData
+		}
+	}
 	// Return as string
 	return value
 }
@@ -153,7 +162,7 @@ func handleOperation(operation string, resources []string, flags map[string]inte
 	switch operation {
 	case "get", "list", "show":
 		makeGetRequest(endpoint, flags)
-	case "create":
+	case "create", "search", "find":
 		makePostRequest(endpoint, flags)
 	case "update", "set":
 		makePutRequest(endpoint, flags)

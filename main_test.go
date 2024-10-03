@@ -10,10 +10,11 @@ func TestParseValue(t *testing.T) {
 		input    string
 		expected interface{}
 	}{
+		// Existing tests
 		{"true", true},
 		{"false", false},
 		{"True", true},
-		{"False", false},
+		{"False", false}, // Corrected to false
 		{"1", int64(1)},
 		{"0", int64(0)},
 		{"-1", int64(-1)},
@@ -27,6 +28,24 @@ func TestParseValue(t *testing.T) {
 		{" ", " "},
 		{"truee", "truee"},   // Should be parsed as string
 		{"123abc", "123abc"}, // Should be parsed as string
+
+		// New tests for JSON arrays and objects
+		{
+			input:    `["val1", "val2"]`,
+			expected: []interface{}{"val1", "val2"},
+		},
+		{
+			input: `{"key1": "value1", "key2": 2}`,
+			expected: map[string]interface{}{
+				"key1": "value1",
+				"key2": float64(2), // JSON numbers are parsed as float64
+			},
+		},
+		// Test invalid JSON (should return as string)
+		{
+			input:    `[invalid json`,
+			expected: "[invalid json",
+		},
 	}
 
 	for _, test := range tests {
@@ -43,6 +62,7 @@ func TestParseDynamicFlags(t *testing.T) {
 		args     []string
 		expected map[string]interface{}
 	}{
+		// Existing tests
 		{
 			args: []string{"--bool=true", "--int=123", "--float=45.67", "--string=hello"},
 			expected: map[string]interface{}{
@@ -88,6 +108,30 @@ func TestParseDynamicFlags(t *testing.T) {
 			args: []string{"--weirdBool", "truee"},
 			expected: map[string]interface{}{
 				"weirdBool": "truee",
+			},
+		},
+
+		// New tests with JSON arrays and objects
+		{
+			args: []string{"--params", `["val1", "val2"]`},
+			expected: map[string]interface{}{
+				"params": []interface{}{"val1", "val2"},
+			},
+		},
+		{
+			args: []string{"--data", `{"key1":"value1","key2":2}`},
+			expected: map[string]interface{}{
+				"data": map[string]interface{}{
+					"key1": "value1",
+					"key2": float64(2), // JSON numbers are parsed as float64
+				},
+			},
+		},
+		// Test invalid JSON (should return as string)
+		{
+			args: []string{"--invalidJson", `[invalid json`},
+			expected: map[string]interface{}{
+				"invalidJson": "[invalid json",
 			},
 		},
 	}
