@@ -211,11 +211,7 @@ func makeGetRequest(endpoint string, params map[string]interface{}) {
 
 	body, _ := ioutil.ReadAll(resp.Body)
 
-	if debug {
-		fmt.Println("> Response Status:", resp.Status)
-		fmt.Println("> Response Headers:", resp.Header)
-	}
-
+	logResponseDetailsOnDebug(resp)
 	fmt.Println(string(body))
 }
 
@@ -252,11 +248,7 @@ func makePostRequest(endpoint string, bodyData map[string]interface{}) {
 
 	body, _ := ioutil.ReadAll(resp.Body)
 
-	if debug {
-		fmt.Println("> Response Status:", resp.Status)
-		fmt.Println("> Response Headers:", resp.Header)
-	}
-
+	logResponseDetailsOnDebug(resp)
 	fmt.Println(string(body))
 }
 
@@ -293,11 +285,7 @@ func makePutRequest(endpoint string, bodyData map[string]interface{}) {
 
 	body, _ := ioutil.ReadAll(resp.Body)
 
-	if debug {
-		fmt.Println("> Response Status:", resp.Status)
-		fmt.Println("> Response Headers:", resp.Header)
-	}
-
+	logResponseDetailsOnDebug(resp)
 	fmt.Println(string(body))
 }
 
@@ -327,12 +315,15 @@ func makeDeleteRequest(endpoint string) {
 
 	body, _ := ioutil.ReadAll(resp.Body)
 
+	logResponseDetailsOnDebug(resp)
+	fmt.Println(string(body))
+}
+
+func logResponseDetailsOnDebug(resp *http.Response) {
 	if debug {
 		fmt.Println("> Response Status:", resp.Status)
 		fmt.Println("> Response Headers:", resp.Header)
 	}
-
-	fmt.Println(string(body))
 }
 
 func setAuthorization(req *http.Request) {
