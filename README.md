@@ -33,7 +33,7 @@ just build
 ## Usage
 
 ```bash
-./ucli [--config CONFIG_FILE] [--debug] OPERATION RESOURCE [RESOURCE ...] [--FLAG VALUE ...]
+./ucli [--config CONFIG_FILE] [--ucli-debug] OPERATION RESOURCE [RESOURCE ...] [--FLAG VALUE ...]
 ```
 
 ### Operations
@@ -46,7 +46,7 @@ just build
 ### Options
 
 - `--config`: Specify a custom configuration file. Defaults to `configuration.yaml` in the current directory.
-- `--debug`: Enable debug mode for verbose output.
+- `--ucli-debug`: Enable debug mode for verbose output.
 
 ### Flags
 
@@ -133,18 +133,18 @@ headers:
 
 ## Debug Mode
 
-- Enable by adding the `--debug` flag.
+- Enable by adding the `--ucli-debug` flag.
 - Outputs detailed information about requests, responses, and query parameters.
 
 ```bash
-./ucli --debug get users
+./ucli --ucli-debug get users
 ```
 
 ## Dynamic Flags
 
 - Parameters passed via flags are automatically parsed as:
   - **integers** (e.g., `--limit=10`),
-  - **booleans** (e.g., `--debug=true`),
+  - **booleans** (e.g., `--boolValue=true`),
   - **floats** (e.g., `--price=99.99`),
   - **JSON** objects or arrays (e.g., `--filters='{"name": "John"}'`).
 

@@ -53,11 +53,11 @@ func main() {
 		} else if strings.HasPrefix(arg, "--config=") {
 			configPath = strings.TrimPrefix(arg, "--config=")
 			i++
-		} else if arg == "--debug" {
+		} else if arg == "--ucli-debug" {
 			debug = true
 			i++
-		} else if strings.HasPrefix(arg, "--debug=") {
-			value := strings.TrimPrefix(arg, "--debug=")
+		} else if strings.HasPrefix(arg, "--ucli-debug=") {
+			value := strings.TrimPrefix(arg, "--ucli-debug=")
 			debug = value == "true" || value == "1"
 			i++
 		} else {
