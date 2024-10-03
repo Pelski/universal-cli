@@ -137,9 +137,9 @@ func TestParseDynamicFlags(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		result := parseDynamicFlags(test.args)
+		result := ParseDynamicFlags(test.args)
 		if !reflect.DeepEqual(result, test.expected) {
-			t.Errorf("parseDynamicFlags(%v) = %v; expected %v",
+			t.Errorf("ParseDynamicFlags(%v) = %v; expected %v",
 				test.args, result, test.expected)
 		}
 	}
