@@ -1,7 +1,3 @@
-Jasne! Oto zaktualizowana wersja Twojego `README.md`:
-
----
-
 # Universal CLI - HTTP client for creating tools
 
 This is a command-line tool written in Go that allows you to interact with HTTP APIs using standard HTTP methods (`GET`, `POST`, `PUT`, `DELETE`). It supports configuration via a file, authentication methods, custom headers, and dynamic parameters.
